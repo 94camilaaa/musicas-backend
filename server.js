@@ -14,7 +14,7 @@ const musicas = [
 server.get('/musicas', function(request, response) {
     response.json(musicas);
 })
-
+ 
 server.post('/musicas', function(request, response) {
    
     const {id, nome, cantor, ano, gosta} = request.body;
