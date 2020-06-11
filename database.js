@@ -13,26 +13,47 @@ const pool = new Pool ({
     database:'d7ri4qruv1b1f0',
     port: 5432,
     ssl: {rejectUnauthorized: false }
-
 })
 
-const sql = `
-    CREATE TABLE IF NOT EXISTS musicas
-    (
-        id serial primary key,
-        nome varchar (200),
-        cantor varchar (200),
-        ano int,
-        gosta boolean
-    )
+//const sql = `
+//    CREATE TABLE IF NOT EXISTS musicas
+//    (
+//        id serial primary key,
+//        nome varchar (200),
+//        cantor varchar (200),
+//        ano int,
+//        gosta boolean
+//    )
+//
+//`;
 
-`;
 
+// pool.query(sql, function(error, result) {
+//    if(error)
+//         throw error
+//        
+//    console.log ('Tabela criada com sucesso!');    
+//
+// });
 
-pool.query(sql, function(error, result) {
-    if(error)
-         throw error
-        
-    console.log ('Tabela criada com sucesso!');    
+//INSERT
+//const sql_insert = `
+//        INSERT INTO musicas (nome, cantor, ano, gosta) VALUES ('Alice','Lady Gaga',2020, false)
+//`;
+//
+//pool.query(sql_insert, function(error, result) {
+//   if(error)
+//        throw error;
+//
+ //  console.log(result.rowCount);
+//})
 
-});
+//SELECT
+// const sql_select = `SELECT * FROM musicas`;
+//
+// pool.query(sql_select, function(error, result) {
+//    if(error)
+//         throw error;
+//
+//     console.log(result.rows);
+// })
