@@ -43,7 +43,7 @@ server.get('/musicas/:id', async function(request, response) {
 //POST
 server.post('/musicas', async function(request, response) {
     const nome = request.body.nome;
-    const cantor = request.body.diretor;
+    const cantor = request.body.cantor;
     const ano = request.body.ano;
     const sql= `INSERT INTO musicas (nome, cantor, ano, gosta) VALUES ($1, $2, $3, $4)`;
     await pool.query(sql, [nome, cantor, ano, false]);
