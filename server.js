@@ -17,8 +17,9 @@ server.use(cors());
 
 server.use(express.json());
 
-//Musicas (id, nome, cantor, ano, gosta(sim ou não)
- 
+//Musicas (id, nome, cantor, ano, gosta(sim ou não))
+
+// GET
 server.get('/musicas', async function(request, response) {
    result = await pool.query('SELECT * FROM musicas');
 
@@ -39,43 +40,47 @@ server.get('/musicas/:id', async function(request, response) {
     return response.json(result.rows);
 })
  
-server.post('/musicas', function(request, response) {
-   
-    const {nome, cantor, ano, gosta} = request.body;
-
-    musicas.push({nome, cantor, ano, gosta})
-    response.status(204).send();
-})
-
-server.put('/musicas/:id', function(request, response) {
-    const id = request.params.id;
-    const {nome, cantor, ano, gosta} = request.body;
-
-   for(let i = 0; i < musicas.length; i++){
-        if(musicas[i].id == id) {
-            musicas[i].nome = nome;
-            musicas[i].cantor = cantor;
-            musicas[i].ano = ano;
-            musicas[i].gosta = gosta;
-            break;
-        }
-    }
-
+//POST
+server.post('/musicas', async function(request, response) {
+    const nome = request.body.nome;
+    const cantor = request.body.diretor;
+    const ano = request.body.ano;
+    const sql= `INSERT INTO musicas (nome, cantor, ano, gosta) VALUES ($1, $2, $3, $4)`;
+    await pool.query(sql, [nome, cantor, ano, false]);
     return response.status(204).send();
-
 })
 
-server.delete('/musicas/:id', function(request, response) {
-
+//DELETE
+server.delete('/musicas/:id', async function(request, response) {
     const id = request.params.id;
+    const sql = `DELETE FROM musicas WHERE id = $1`;
+    await pool.query(sql, [id]);
+    return response.status(204).send();
+})
 
-    for(let i = 0; i < musicas.length; i++){
-        if(musicas[i].id == id) {
-            musicas.splice(i, 1)
-            break;
-        }
-    }
 
+//UPDATE
+server.put('/musicas/:id', async function(request, response) {
+    const id = request.params.id;
+    const { nome, cantor, ano, gosta } = request.body;
+    const sql = `UPDATE musicas SET nome = $1, cantor = $2, ano = $3, gosta = $4 WHERE id = $5`;
+    await pool.query(sql, [nome, cantor, ano, gosta, id]);
+    return response.status(204).send();
+})
+
+
+//UPDATE DO gosta
+server.patch('/musicas/:id/gosta', async function(request, response) {
+    const id = request.params.id;
+    const sql = `UPDATE musicas SET gosta = true WHERE id = $1`;
+    await pool.query(sql, [id]);
+    return response.status(204).send();
+})
+
+server.patch('/musicas/:id/naogosta', async function(request, response) {
+    const id = request.params.id;
+    const sql = `UPDATE musicas SET gosta = false WHERE id = $1`;
+    await pool.query(sql, [id]);
     return response.status(204).send();
 })
 
