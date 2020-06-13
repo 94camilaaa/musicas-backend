@@ -20,20 +20,20 @@ server.use(express.json());
 //Musicas (id, nome, cantor, ano, gosta(sim ou não))
 
 // GET
-server.get('/musicas', async function(request, response) {
+server.get('/musica', async function(request, response) {
    result = await pool.query('SELECT * FROM musicas');
 
    return response.json(result.rows);
 })
 
-server.get('/musicas/search', async function(request, response) {
+server.get('/musica/search', async function(request, response) {
     const nome = request.query.nome;
     const sql = `SELECT * FROM musicas WHERE nome ILIKE $1`;
     const result = await pool.query(sql, ["%" +  nome + "%"]);
     return response.json(result.rows);
 })
 
-server.get('/musicas/:id', async function(request, response) {
+server.get('/musica/:id', async function(request, response) {
     const id = request.params.id;
     const sql = `SELECT * FROM musicas WHERE id = $1`
     const result = await pool.query(sql, [id]);
@@ -41,7 +41,7 @@ server.get('/musicas/:id', async function(request, response) {
 })
  
 //POST
-server.post('/musicas', async function(request, response) {
+server.post('/musica', async function(request, response) {
     const nome = request.body.nome;
     const cantor = request.body.cantor;
     const ano = request.body.ano;
@@ -51,7 +51,7 @@ server.post('/musicas', async function(request, response) {
 })
 
 //DELETE
-server.delete('/musicas/:id', async function(request, response) {
+server.delete('/musica/:id', async function(request, response) {
     const id = request.params.id;
     const sql = `DELETE FROM musicas WHERE id = $1`;
     await pool.query(sql, [id]);
@@ -60,7 +60,7 @@ server.delete('/musicas/:id', async function(request, response) {
 
 
 //UPDATE
-server.put('/musicas/:id', async function(request, response) {
+server.put('/musica/:id', async function(request, response) {
     const id = request.params.id;
     const { nome, cantor, ano, gosta } = request.body;
     const sql = `UPDATE musicas SET nome = $1, cantor = $2, ano = $3, gosta = $4 WHERE id = $5`;
@@ -70,14 +70,14 @@ server.put('/musicas/:id', async function(request, response) {
 
 
 //UPDATE DO gosta
-server.patch('/musicas/:id/gosta', async function(request, response) {
+server.patch('/musica/:id/gosta', async function(request, response) {
     const id = request.params.id;
     const sql = `UPDATE musicas SET gosta = true WHERE id = $1`;
     await pool.query(sql, [id]);
     return response.status(204).send();
 })
 
-server.patch('/musicas/:id/naogosta', async function(request, response) {
+server.patch('/musica/:id/naogosta', async function(request, response) {
     const id = request.params.id;
     const sql = `UPDATE musicas SET gosta = false WHERE id = $1`;
     await pool.query(sql, [id]);
